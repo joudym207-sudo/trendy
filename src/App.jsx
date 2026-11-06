@@ -13,6 +13,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => setProducts(data.products))
       .catch((err) => console.log(err));
+      // this is a comment
   }, []);
   // useEffect(() => {
   //   fetch("https://dummyjson.com/products")
