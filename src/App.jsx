@@ -27,7 +27,6 @@ function App() {
   //       setLoading(false);})
   // }, []);
 
-
   return (
     <div className="store">
       <h1 className="store__title">Our Products</h1>
@@ -48,6 +47,44 @@ function App() {
 }
 
 export default App
+
+
+
+// fetch("https://dummyjson.com/products?limit=100")----
+//   .then(res => res.json())                       ----
+//   .then(data => {                                ----
+//     const shuffled = [...data.products].sort(    ----
+//       () => Math.random() - 0.5                  ----
+//     );                                           ----
+//     setProducts(shuffled.slice(0, 10));          ----
+//   });                                            ----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
