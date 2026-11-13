@@ -41,3 +41,32 @@ body {
     padding: 10px;
   }
 }
+
+.store-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 25px auto;
+}
+
+.search-text {
+  text-align: center;
+}
+
+.search-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  width: 300px;
+}
+
+.search-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #8E9AAF;
+  color: white;
+  cursor: pointer;
+}

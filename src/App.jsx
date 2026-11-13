@@ -1,53 +1,105 @@
-import { useState, useEffect } from 'react'
+
+import { useState, useEffect } from 'react';
 import ProductCard from "./components/productCard";
 import { RingLoader } from "react-spinners";
-import './App.css'
+import './App.css';
 
 function App() {
   const [products, setProducts] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [submitQuery, setSubmitQuery] = useState("");
+
+  function handleSearch(e) {
+    e.preventDefault();
+    setSubmitQuery(searchQuery);
+  }
 
   useEffect(() => {
     fetch("https://dummyjson.com/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data.products))
-      .catch((err) => console.log(err));
-      // this is a comment
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Something went wrong!");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProducts(data.products);
+      })
+      .catch((error) => {
+        setError(error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
-  // useEffect(() => {
-  //   fetch("https://dummyjson.com/products")
-  //   .then((response) => {
-  //       if (!response.ok) throw new Error("server error!");
-  //       return response.json();})
-  //   .then((data) => {
-  //       setProducts(data.products);
-  //       setLoading(false);})
-  //   .catch((err) => {
-  //       setError(err.massage);
-  //       setLoading(false);})
-  // }, []);
+
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(submitQuery.trim().toLowerCase())
+  );
 
   return (
-    <div className="store">
-      <h1 className="store__title">Our Products</h1>
+    <>
+      <header>
+        <h1 className="search-text">
+          Search here for the products
+        </h1>
 
-      <div className="store__grid">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            image={product.thumbnail}
-            name={product.title}
-            price={product.price}
-            rating={product.rating}
+        <form className="store-form" onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="You can search here"
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-        ))}
+
+          <button type="submit" className="search-btn">
+            Search
+          </button>
+        </form>
+      </header>
+
+      <div className="store">
+
+        {loading ? (
+          <div>
+            <p>Content is loading...</p>
+            <RingLoader color="#36d7b7" />
+          </div>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <>
+            <h1 className="store__title">Our Products</h1>
+
+            <div className="store__grid">
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    image={product.thumbnail}
+                    name={product.title}
+                    price={product.price}
+                    rating={product.rating}
+                  />
+                ))
+              ) : (
+                <p>No products found!</p>
+              )}
+            </div>
+          </>
+        )}
+
       </div>
-    </div>
+    </>
   );
 }
 
-export default App
+export default App;
+
 
 
 

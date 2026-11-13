@@ -35,10 +35,10 @@
 }
 
 .card__rating {
-  color: #e5a000;
+  color: rgb(215, 212, 0);
 }
 
-.card__button {
+.card__button {      
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,11 +47,11 @@
   padding: 10px;
   border: none;
   border-radius: 8px;
-  background: orange;
+  background: #8E9AAF;
   color: white;
   cursor: pointer;
 }
 
 .card__button:hover {
-  background: darkorange;
+  background: #8E9AAF;
 }
