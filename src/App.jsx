@@ -4,6 +4,9 @@ import ProductCard from "./components/productCard";
 import { RingLoader } from "react-spinners";
 import './App.css';
 
+
+const CATEGORIES = ["all", "furniture", "laptops", "vehicle", "fragrances", "groceries",];
+
 function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,13 +15,28 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [submitQuery, setSubmitQuery] = useState("");
 
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
   function handleSearch(e) {
     e.preventDefault();
+    setSelectedCategory("all");
     setSubmitQuery(searchQuery);
+  }
+  function handleCategory(category) {
+    setSelectedCategory(category);
+    setSearchQuery("");
+    setSubmitQuery("");
   }
 
   useEffect(() => {
-    fetch("https://dummyjson.com/products")
+    let url = "https://dummyjson.com/products" ;
+    if(submitQuery){
+      url = `https://dummyjson.com/products/search?q=${submitQuery}`;
+    }else if (selectedCategory !== "all") {
+      url = `https://dummyjson.com/products/category/${selectedCategory}`
+    }
+
+    fetch(url)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Something went wrong!");
@@ -34,7 +52,7 @@ function App() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [submitQuery, selectedCategory]);
 
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(submitQuery.trim().toLowerCase())
@@ -60,6 +78,13 @@ function App() {
             Search
           </button>
         </form>
+        <div className='categories-bar' >
+          {CATEGORIES.map((cat) => (
+            <button key={cat} className={`cat-btn`} onClick={() => handleCategory(cat)} >{cat.toUpperCase()}</button>
+          ))}
+
+        </div>
+
       </header>
 
       <div className="store">
@@ -73,8 +98,11 @@ function App() {
           <p>Error: {error}</p>
         ) : (
           <>
-            <h1 className="store__title">Our Products</h1>
+          <p style={{marginBottom: "15px", color:"#8E9AAF"}}>
+            Showing <strong>{products.length}</strong> products
+          </p>
 
+            <h1 className="store__title">Our Products</h1>
             <div className="store__grid">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
