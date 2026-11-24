@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import ProductCard from "./components/productCard";
 import { RingLoader } from "react-spinners";
@@ -17,6 +16,8 @@ function App() {
 
   const [selectedCategory, setSelectedCategory] = useState("all");
 
+  
+
   function handleSearch(e) {
     e.preventDefault();
     setSelectedCategory("all");
@@ -29,12 +30,16 @@ function App() {
   }
 
   useEffect(() => {
-    let url = "https://dummyjson.com/products" ;
-    if(submitQuery){
-      url = `https://dummyjson.com/products/search?q=${submitQuery}`;
-    }else if (selectedCategory !== "all") {
-      url = `https://dummyjson.com/products/category/${selectedCategory}`
+    let url = "https://dummyjson.com/products";
+
+    if (submitQuery) {
+      url = `https://dummyjson.com/products/search?q=${encodeURIComponent(submitQuery)}`;
+    } else if (selectedCategory !== "all") {
+      url = `https://dummyjson.com/products/category/${selectedCategory}`;
     }
+
+    setLoading(true);
+    setError(null);
 
     fetch(url)
       .then((res) => {
@@ -98,9 +103,9 @@ function App() {
           <p>Error: {error}</p>
         ) : (
           <>
-          <p style={{marginBottom: "15px", color:"#8E9AAF"}}>
-            Showing <strong>{products.length}</strong> products
-          </p>
+            <p style={{ marginBottom: "15px", color: "#8E9AAF" }}>
+              Showing <strong>{products.length}</strong> products
+            </p>
 
             <h1 className="store__title">Our Products</h1>
             <div className="store__grid">
@@ -112,6 +117,10 @@ function App() {
                     name={product.title}
                     price={product.price}
                     rating={product.rating}
+                    discount={product.discountPercentage}
+                    brand={product.brand}
+                    availability={product.availabilityStatus}
+                    category={product.category}
                   />
                 ))
               ) : (
